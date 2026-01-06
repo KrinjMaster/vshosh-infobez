@@ -1,0 +1,416 @@
+[
+  {
+    "timestamp": "2026-01-02T19:45:01",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Started User Manager for UID 1001.",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:45:02",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Started Session 12 of user ivan.",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:45:05",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "Application org.gnome.Nautilus launched by ivan",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:45:09",
+    "host": "mos-alt",
+    "service": "kernel",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "usb 1-1: new high-speed USB device number 7",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:45:14",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "unknown",
+    "event_type": "SCREENSHOT",
+    "message": "Started Screenshot Service for user ivan",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:45:20",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "SCREENSHOT",
+    "message": "Screenshot taken by user ivan",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:46:01",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "petr",
+    "event_type": "AUTH_FAILED",
+    "message": "Failed password for user petr from 10.0.0.8 port 51231",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:46:05",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "petr",
+    "event_type": "AUTH_FAILED",
+    "message": "Failed password for user petr from 10.0.0.8 port 51232",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:46:09",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "petr",
+    "event_type": "AUTH_FAILED",
+    "message": "Failed password for user petr from 10.0.0.8 port 51233",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:46:12",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "petr",
+    "event_type": "AUTH_SUCCESS",
+    "message": "Accepted password for user petr from 10.0.0.8 port 51234",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:46:40",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Started Session 13 of user petr.",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:46:45",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "Application org.gnome.Terminal launched by petr",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:46:48",
+    "host": "mos-alt",
+    "service": "sudo",
+    "user": "petr",
+    "event_type": "PRIV_ESC_ATTEMPT",
+    "message": "petr : user NOT in sudoers ; TTY=pts/2 ; COMMAND=/bin/bash",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:47:02",
+    "host": "mos-alt",
+    "service": "auditd",
+    "user": "unknown",
+    "event_type": "FILE_ACCESS_DENIED",
+    "message": "USER_AVC pid=2034 uid=1002 path=\"/etc/shadow\" perm=\"r\" result=denied",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:47:06",
+    "host": "mos-alt",
+    "service": "auditd",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "USER_AVC pid=2035 uid=1002 path=\"/etc/passwd\" perm=\"r\" result=allowed",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:47:11",
+    "host": "mos-alt",
+    "service": "auditd",
+    "user": "unknown",
+    "event_type": "EXEC_SCRIPT_BLOCKED",
+    "message": "EXECVE uid=1002 cmd=\"/tmp/check.sh\" result=denied",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:47:20",
+    "host": "mos-alt",
+    "service": "kernel",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "process 2035 attempted access to restricted memory",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:47:25",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Stopped Session 13 of user petr.",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:48:01",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "admin",
+    "event_type": "AUTH_SUCCESS",
+    "message": "Accepted password for user admin from 10.0.0.2 port 61231",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:48:04",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Started Session 14 of user admin.",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:48:10",
+    "host": "mos-alt",
+    "service": "sudo",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "admin : TTY=pts/0 ; COMMAND=/usr/bin/apt update",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:48:20",
+    "host": "mos-alt",
+    "service": "sudo",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "admin : TTY=pts/0 ; COMMAND=/usr/bin/apt upgrade",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:48:45",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Package update completed successfully",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:49:02",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "Application org.gnome.Firefox launched by ivan",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:49:15",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "File downloaded by ivan: report.pdf",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:49:25",
+    "host": "mos-alt",
+    "service": "auditd",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "USER_AVC pid=2401 uid=1001 path=\"/home/ivan/report.pdf\" perm=\"r\" result=allowed",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:50:01",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "guest",
+    "event_type": "AUTH_FAILED",
+    "message": "Failed password for user guest from 10.0.0.9 port 40001",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:50:04",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "guest",
+    "event_type": "AUTH_FAILED",
+    "message": "Failed password for user guest from 10.0.0.9 port 40002",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:50:07",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "guest",
+    "event_type": "AUTH_FAILED",
+    "message": "Failed password for user guest from 10.0.0.9 port 40003",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:50:10",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "guest",
+    "event_type": "AUTH_FAILED",
+    "message": "Failed password for user guest from 10.0.0.9 port 40004",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:50:12",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "guest",
+    "event_type": "AUTH_FAILED",
+    "message": "Failed password for user guest from 10.0.0.9 port 40005",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:50:30",
+    "host": "mos-alt",
+    "service": "kernel",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "firewall dropped packet from 10.0.0.9",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:50:40",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "ssh.service restarted",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:51:01",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "Application org.gnome.Calculator launched by ivan",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:51:05",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "Calculator closed by ivan",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:52:11",
+    "host": "mos-alt",
+    "service": "auditd",
+    "user": "unknown",
+    "event_type": "FILE_ACCESS_DENIED",
+    "message": "USER_AVC pid=2501 uid=1001 path=\"/etc/hosts\" perm=\"w\" result=denied",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:52:15",
+    "host": "mos-alt",
+    "service": "auditd",
+    "user": "unknown",
+    "event_type": "EXEC_SCRIPT_BLOCKED",
+    "message": "EXECVE uid=1001 cmd=\"/usr/bin/python3 /tmp/test.py\" result=denied",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:53:01",
+    "host": "mos-alt",
+    "service": "sshd",
+    "user": "ivan",
+    "event_type": "AUTH_SUCCESS",
+    "message": "Accepted password for user ivan from 10.0.0.5 port 53021",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:53:05",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Started Session 15 of user ivan.",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:53:10",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "Application org.gnome.TextEditor launched by ivan",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:53:25",
+    "host": "mos-alt",
+    "service": "gnome-shell",
+    "user": "unknown",
+    "event_type": "INFO",
+    "message": "File saved by ivan: notes.txt",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:54:01",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Stopped Session 12 of user ivan.",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:54:30",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Stopped Session 15 of user ivan.",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:55:01",
+    "host": "mos-alt",
+    "service": "cron",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "Job completed for user root",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:55:10",
+    "host": "mos-alt",
+    "service": "kernel",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "CPU temperature normal",
+    "source_file": "system.log"
+  },
+  {
+    "timestamp": "2026-01-02T19:55:20",
+    "host": "mos-alt",
+    "service": "systemd",
+    "user": "system",
+    "event_type": "INFO",
+    "message": "System idle",
+    "source_file": "system.log"
+  }
+]
