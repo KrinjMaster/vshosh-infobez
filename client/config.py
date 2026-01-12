@@ -8,6 +8,8 @@ VERIFY_TLS = os.getenv("VERIFY_TLS", False)
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
 LOG_FILE = os.path.join(LOG_DIR, f"log_{CLIENT_ID}.log")
+LOG_GENERATOR_DIR = os.path.join(os.path.dirname(__file__), "log-generator")
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "generator-config.yaml")
 
 SERVER_URL = os.getenv("SERVER_URL", "http://172.28.0.10:8000")
 AUTH_ENDPOINT = "/api/auth"

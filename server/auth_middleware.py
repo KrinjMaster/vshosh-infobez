@@ -1,5 +1,5 @@
 import jwt
-from config import ALLOWED_IPS, ALLOWED_MACS, JWT_ALGORITHM, SECRET_KEY
+from config import AUTHORIZED_IPS, AUTHORIZED_MACS, JWT_ALGORITHM, JWT_SECRET
 from flask import jsonify, request
 
 
@@ -12,16 +12,16 @@ def verify_request(f):
         if not token:
             return jsonify({"error": "JWT required"}), 401
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[JWT_ALGORITHM])
+            payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         except:
             return jsonify({"error": "Invalid token"}), 401
 
         mac = request.headers.get("X-MAC-ADDRESS")
-        if not mac or mac not in ALLOWED_MACS:
+        if not mac or mac not in AUTHORIZED_MACS:
             return jsonify({"error": "Unauthorized MAC"}), 403
 
         client_ip = request.remote_addr
-        if client_ip not in ALLOWED_IPS:
+        if client_ip not in AUTHORIZED_IPS:
             return jsonify({"error": "Unauthorized IP"}), 403
 
         request.client_mac = mac

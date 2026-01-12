@@ -8,7 +8,5 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN python -c "from models import init_db; init_db()"
-
 EXPOSE 8000
 CMD ["python", "main.py"]

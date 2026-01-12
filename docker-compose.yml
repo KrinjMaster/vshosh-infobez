@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   server:
@@ -11,11 +11,10 @@ services:
       JWT_SECRET: "supersecret"
       AUTHORIZED_MACS: "AA:BB:CC:00:01,AA:BB:CC:00:02,AA:BB:CC:00:03"
       AUTHORIZED_IPS: "172.28.0.2,172.28.0.3,172.28.0.4"
+      DB_PATH: "/app/db.sqlite3"
     networks:
       infobez_net:
         ipv4_address: 172.28.0.10
-    volumes:
-      - ./server/data:/app/data
 
   client1:
     build:

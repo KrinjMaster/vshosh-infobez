@@ -1,0 +1,477 @@
+generators:
+  endpoint:
+    enabled: true
+    frequency: 30
+    templates:
+      - level: INFO
+        messageTemplate: "HTTP {method} {path} - {status} {responseTime}ms - IP: {CLIENTIP} - User: {USERID}"
+        probability: 0.5
+        fields:
+          method: "{{random.arrayElement(['GET','POST','PUT','DELETE'])}}"
+          path: "{{random.arrayElement(['/login','/api/data','/admin','/logout'])}}"
+          status: "{{random.arrayElement([200,201,204])}}"
+          responseTime: "{{random.int(10,1500)}}"
+          userAgent: "{{faker.internet.userAgent}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: api-gateway
+          correlationId: "{correlationId}"
+
+      - level: ERROR
+        messageTemplate: "HTTP {method} {path} - {status} {errorMessage} - IP: {CLIENTIP} - User: {USERID}"
+        probability: 0.01
+        fields:
+          method: "{{random.arrayElement(['GET','POST'])}}"
+          path: "{{random.arrayElement(['/login','/admin'])}}"
+          status: "{{random.arrayElement([401,403,500])}}"
+          errorMessage: "{{random.arrayElement(['Unauthorized','Forbidden','Internal Server Error'])}}"
+          errorCode: "{{random.arrayElement(['AUTH001','AUTH403','SRV500'])}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: api-gateway
+          errorCode: "{errorCode}"
+          correlationId: "{correlationId}"
+
+      - level: WARN
+        messageTemplate: "Rate limit exceeded for IP {CLIENTIP} - {path} - Attempts: {attemptCount}/min"
+        probability: 0.05
+        fields:
+          path: "{{random.arrayElement(['/login','/api/data'])}}"
+          attemptCount: "{{random.int(50,300)}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: rate-limiter
+          attemptCount: "{attemptCount}"
+          correlationId: "{correlationId}"
+
+      - level: DEBUG
+        messageTemplate: "Request headers: {headers} - {path} - Session: {SESSIONID}"
+        probability: 0.1
+        fields:
+          headers: "{{faker.internet.userAgent}}"
+          path: "{{random.arrayElement(['/api/data','/profile'])}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: api-gateway
+          correlationId: "{correlationId}"
+
+      - level: WARN
+        messageTemplate: "Suspicious request pattern detected: {method} {path} from {CLIENTIP} - Pattern: {patternType}"
+        probability: 0.05
+        fields:
+          method: "{{random.arrayElement(['GET','POST'])}}"
+          path: "{{random.arrayElement(['/login','/admin'])}}"
+          patternType: "{{random.arrayElement(['bruteforce','sql_injection','path_traversal'])}}"
+          riskScore: "{{random.int(60,95)}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: security-monitor
+          riskScore: "{riskScore}"
+          correlationId: "{correlationId}"
+  authentication:
+    enabled: true
+    frequency: 40
+    templates:
+      - level: INFO
+        messageTemplate: "User {USERNAME} login successful from {CLIENTIP} - Session: {SESSIONID} - Method: password"
+        probability: 0.5
+        fields:
+          authMethod: "password"
+          userRole: "{{random.arrayElement(['user','staff','admin'])}}"
+          timestamp: "{{faker.date.recent}}"
+        metadata:
+          component: auth-service
+          userRole: "{userRole}"
+
+      - level: WARN
+        messageTemplate: "Failed login attempt for {USERNAME} from {CLIENTIP} - Attempts: {attemptCount}/5 - Reason: wrong_password"
+        probability: 0.05
+        fields:
+          attemptCount: "{{random.int(1,5)}}"
+          failureReason: "wrong_password"
+          userAgent: "{{faker.internet.userAgent}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: auth-service
+          attemptCount: "{attemptCount}"
+          failureReason: "{failureReason}"
+
+      - level: ERROR
+        messageTemplate: "Account {USERNAME} locked due to multiple failed attempts from {CLIENTIP} - Lock duration: 30min"
+        probability: 0.01
+        fields:
+          lockDuration: "23"
+          totalAttempts: "{{random.int(5,15)}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: auth-service
+          lockDuration: "{lockDuration}"
+          totalAttempts: "{totalAttempts}"
+
+      - level: INFO
+        messageTemplate: "Password changed for user {USERNAME} from {CLIENTIP} - Password policy: nist-800-63"
+        probability: 0.05
+        fields:
+          policyName: "{{random.arrayElement(['default','strict','nist-800-63'])}}"
+          passwordAge: "{{random.int(30,365)}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: auth-service
+          policyName: "{policyName}"
+
+      - level: WARN
+        messageTemplate: "Suspicious login: {USERNAME} from unusual location {location} ({CLIENTIP}) - Risk score: 87"
+        probability: 0.08
+        fields:
+          location: "{{random.arrayElement(['RU','CN','US','DE'])}}"
+          previousLocation: "{{random.arrayElement(['DE','US'])}}"
+          riskScore: "81"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: security-monitor
+          riskScore: "{riskScore}"
+
+      - level: INFO
+        messageTemplate: "User {USERNAME} logout - Session duration: {duration}min - Reason: {logoutReason}"
+        probability: 0.02
+        fields:
+          duration: "{{random.int(1,240)}}"
+          logoutReason: "{{random.arrayElement(['timeout','user_request','admin_logout'])}}"
+          sessionId: "{{faker.string.uuid}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: auth-service
+          logoutReason: "{logoutReason}"
+
+      - level: DEBUG
+        messageTemplate: "Authentication token refresh for user {USERNAME} - Token type: access - Expires: 34"
+        probability: 0.1
+        fields:
+          tokenType: "{{random.arrayElement(['access','refresh'])}}"
+          expiryTime: "34"
+          sessionId: "{{faker.string.uuid}}"
+          correlationId: "{{faker.string.uuid}}"
+        metadata:
+          component: auth-service
+          tokenType: "{tokenType}"
+  application:
+    enabled: true
+    frequency: 30
+    templates:
+      - level: INFO
+        messageTemplate: "User {USERID} performed action {action} on resource {resourceId}"
+        probability: 0.99
+        fields:
+          action: "{{random.arrayElement(['create','update','delete','view'])}}"
+          resourceId: "{{faker.string.uuid}}"
+        metadata:
+          component: business-logic
+
+      - level: ERROR
+        messageTemplate: "Database connection failed: {errorMessage}"
+        probability: 0.01
+        fields:
+          errorMessage: "{{random.arrayElement(['timeout','connection refused','auth failed'])}}"
+        metadata:
+          component: database
+  backup:
+    enabled: true
+    frequency: 8
+    templates:
+      - level: INFO
+        messageTemplate: "Backup completed: {backupName} - Size: {backupSize}GB - Duration: {duration}min - Files: {fileCount}"
+        probability: 0.3
+        fields:
+          backupName: "{{random.arrayElement(['daily','weekly','monthly'])}}"
+          backupSize: "{{random.int(10,500)}}"
+          duration: "{{random.int(1,120)}}"
+          fileCount: "{{random.int(100,50000)}}"
+          backupType: "{{random.arrayElement(['full','incremental'])}}"
+          compressionRatio: "{{random.int(1,5)}}"
+        metadata:
+          component: backup-engine
+          backupType: "{backupType}"
+          compressionRatio: "{compressionRatio}"
+
+      - level: WARN
+        messageTemplate: "Backup size increased: {backupName} - Current: {currentSize}GB - Previous: {previousSize}GB - Growth: {growthRate}%"
+        probability: 0.02
+        fields:
+          backupName: "{{random.arrayElement(['daily','weekly','monthly'])}}"
+          currentSize: "{{random.int(200,600)}}"
+          previousSize: "{{random.int(100,400)}}"
+          growthRate: "{{random.int(5,80)}}"
+          trend: "{{random.arrayElement(['linear','spike','gradual'])}}"
+          threshold: "{{random.int(50,90)}}"
+        metadata:
+          component: size-monitor
+          backupName: "{backupName}"
+          currentSize: "{currentSize}"
+          previousSize: "{previousSize}"
+          growthRate: "{growthRate}"
+          trend: "{trend}"
+          threshold: "{threshold}"
+
+      - level: ERROR
+        messageTemplate: "Backup failed: {backupName} - Error: {errorMessage} - Retry: {retryCount}/{maxRetries}"
+        probability: 0.01
+        fields:
+          backupName: "{{random.arrayElement(['daily','weekly','monthly'])}}"
+          errorMessage: "{{random.arrayElement(['Disk I/O error','Permission denied','Network timeout','Checksum mismatch'])}}"
+          retryCount: "{{random.int(1,3)}}"
+          maxRetries: "{{random.int(3,5)}}"
+          errorCode: "{{random.int(1001,1999)}}"
+          lastSuccess: "{{date.recent(7)}}"
+        metadata:
+          component: backup-engine
+          backupName: "{backupName}"
+          errorMessage: "{errorMessage}"
+          retryCount: "{retryCount}"
+          maxRetries: "{maxRetries}"
+          errorCode: "{errorCode}"
+          lastSuccess: "{lastSuccess}"
+
+      - level: INFO
+        messageTemplate: "Backup retention cleanup: Removed {deletedCount} old backups - Freed: {freedSpace}GB"
+        probability: 0.15
+        fields:
+          deletedCount: "{{random.int(1,20)}}"
+          freedSpace: "{{random.int(10,300)}}"
+          retentionPolicy: "{{random.arrayElement(['30d','60d','90d'])}}"
+          oldestBackup: "{{date.past(1)}}"
+          cleanupDuration: "{{random.int(5,60)}}"
+        metadata:
+          component: cleanup-service
+          deletedCount: "{deletedCount}"
+          freedSpace: "{freedSpace}"
+          retentionPolicy: "{retentionPolicy}"
+          oldestBackup: "{oldestBackup}"
+          cleanupDuration: "{cleanupDuration}"
+
+      - level: WARN
+        messageTemplate: "Storage space low: {availableSpace}GB remaining on {storagePath} - Usage: {usage}% - Threshold: {threshold}%"
+        probability: 0.05
+        fields:
+          availableSpace: "{{random.int(5,100)}}"
+          storagePath: "{{random.arrayElement(['/mnt/backups','/data/backups','/var/backups'])}}"
+          usage: "{{random.int(70,95)}}"
+          threshold: "{{random.int(75,90)}}"
+          totalSpace: "{{random.int(500,2000)}}"
+          nextCleanup: "{{date.future(1)}}"
+        metadata:
+          component: storage-monitor
+          availableSpace: "{availableSpace}"
+          storagePath: "{storagePath}"
+          usage: "{usage}"
+          threshold: "{threshold}"
+          totalSpace: "{totalSpace}"
+          nextCleanup: "{nextCleanup}"
+
+      - level: DEBUG
+        messageTemplate: "Backup verification: {backupName} - Integrity: {integrity} - Checksum: {checksum} - Duration: {verifyDuration}s"
+        probability: 0.1
+        fields:
+          backupName: "{{random.arrayElement(['daily','weekly','monthly'])}}"
+          integrity: "{{random.arrayElement(['OK','CORRUPTED'])}}"
+          checksum: "{{faker.string.hexadecimal(32)}}"
+          verifyDuration: "{{random.int(1,300)}}"
+          algorithm: "{{random.arrayElement(['sha256','md5','sha1'])}}"
+          corruptionCount: "{{random.int(0,5)}}"
+        metadata:
+          component: verification-service
+          backupName: "{backupName}"
+          integrity: "{integrity}"
+          checksum: "{checksum}"
+          verifyDuration: "{verifyDuration}"
+          algorithm: "{algorithm}"
+          corruptionCount: "{corruptionCount}"
+  iot:
+    enabled: true
+    frequency: 20
+    templates:
+      - level: INFO
+        messageTemplate: "Device {deviceId} connected - IP: {deviceIP} - Type: {deviceType} - Firmware: {firmwareVersion} - Signal: {signalStrength}dBm"
+        probability: 0.25
+        fields:
+          deviceId: "{{faker.string.uuid}}"
+          deviceIP: "{{faker.internet.ip}}"
+          deviceType: "{{random.arrayElement(['sensor','camera','thermostat','gateway'])}}"
+          firmwareVersion: "{{random.arrayElement(['1.0.3','1.1.0','2.0.1'])}}"
+          signalStrength: "{{random.int(-90,-30)}}"
+          macAddress: "{{faker.internet.mac}}"
+          location: "{{random.arrayElement(['lab','office','warehouse','classroom'])}}"
+        metadata:
+          component: device-manager
+          deviceId: "{deviceId}"
+          deviceIP: "{deviceIP}"
+          deviceType: "{deviceType}"
+          firmwareVersion: "{firmwareVersion}"
+          signalStrength: "{signalStrength}"
+          macAddress: "{macAddress}"
+          location: "{location}"
+
+      - level: WARN
+        messageTemplate: "Device {deviceId} battery low: {batteryLevel}% - Location: {location} - Last charge: 2h ago"
+        probability: 0.02
+        fields:
+          deviceId: "{{faker.string.uuid}}"
+          batteryLevel: "{{random.int(1,20)}}"
+          location: "{{random.arrayElement(['lab','office','warehouse'])}}"
+          lastCharge: "{{random.int(12,240)}}"
+          batteryType: "{{random.arrayElement(['Li-Ion','NiMH'])}}"
+          estimatedRuntime: "{{random.int(1,72)}}"
+        metadata:
+          component: battery-monitor
+          deviceId: "{deviceId}"
+          batteryLevel: "{batteryLevel}"
+          location: "{location}"
+          lastCharge: "{lastCharge}"
+          batteryType: "{batteryType}"
+          estimatedRuntime: "{estimatedRuntime}"
+
+      - level: ERROR
+        messageTemplate: "Device {deviceId} offline - Last seen: {lastSeen} - Uptime: {uptime}h - Reason: {reason}"
+        probability: 0.01
+        fields:
+          deviceId: "{{faker.string.uuid}}"
+          lastSeen: "{{date.recent(2)}}"
+          uptime: "{{random.int(1,1000)}}"
+          reason: "{{random.arrayElement(['signal lost','power failure','firmware crash'])}}"
+          connectionType: "{{random.arrayElement(['wifi','lte','ethernet'])}}"
+          retryCount: "{{random.int(1,5)}}"
+        metadata:
+          component: connectivity-monitor
+          deviceId: "{deviceId}"
+          lastSeen: "{lastSeen}"
+          uptime: "{uptime}"
+          reason: "{reason}"
+          connectionType: "{connectionType}"
+          retryCount: "{retryCount}"
+
+      - level: INFO
+        messageTemplate: "Sensor data: Device {deviceId} - Temperature: {temperature}°C - Humidity: {humidity}% - Pressure: 969hPa"
+        probability: 0.02
+        fields:
+          deviceId: "{{faker.string.uuid}}"
+          temperature: "{{random.int(-10,40)}}"
+          humidity: "{{random.int(20,90)}}"
+          pressure: "{{random.int(950,1050)}}"
+          timestamp: "{{date.recent(1)}}"
+          dataQuality: "{{random.arrayElement(['good','degraded','bad'])}}"
+          calibrationDate: "{{date.past(1)}}"
+        metadata:
+          component: sensor-collector
+          deviceId: "{deviceId}"
+          temperature: "{temperature}"
+          humidity: "{humidity}"
+          pressure: "{pressure}"
+          timestamp: "{timestamp}"
+          dataQuality: "{dataQuality}"
+          calibrationDate: "{calibrationDate}"
+
+      - level: WARN
+        messageTemplate: "Device {deviceId} firmware outdated - Current: {currentVersion} - Latest: {latestVersion} - Security patches: {patchCount}"
+        probability: 0.02
+        fields:
+          deviceId: "{{faker.string.uuid}}"
+          currentVersion: "{{random.arrayElement(['1.0.0','1.1.0'])}}"
+          latestVersion: "{{random.arrayElement(['2.0.0','2.1.0'])}}"
+          patchCount: "{{random.int(1,15)}}"
+          vulnerabilityCount: "{{random.int(0,10)}}"
+          updateAvailable: "{{random.arrayElement([true,false])}}"
+        metadata:
+          component: firmware-manager
+          deviceId: "{deviceId}"
+          currentVersion: "{currentVersion}"
+          latestVersion: "{latestVersion}"
+          patchCount: "{patchCount}"
+          vulnerabilityCount: "{vulnerabilityCount}"
+          updateAvailable: "{updateAvailable}"
+
+      - level: DEBUG
+        messageTemplate: "Device telemetry: {deviceId} - CPU: {cpuUsage}% - Memory: {memoryUsage}% - Storage: {storageUsage}% - Uptime: {uptime}d"
+        probability: 0.1
+        fields:
+          deviceId: "{{faker.string.uuid}}"
+          cpuUsage: "{{random.int(1,100)}}"
+          memoryUsage: "{{random.int(10,95)}}"
+          storageUsage: "{{random.int(10,95)}}"
+          uptime: "{{random.int(1,365)}}"
+          networkLatency: "{{random.int(1,500)}}"
+          dataTransmitted: "{{random.int(100,100000)}}"
+        metadata:
+          component: telemetry-collector
+          deviceId: "{deviceId}"
+          cpuUsage: "{cpuUsage}"
+          memoryUsage: "{memoryUsage}"
+          storageUsage: "{storageUsage}"
+          uptime: "{uptime}"
+          networkLatency: "{networkLatency}"
+          dataTransmitted: "{dataTransmitted}"
+
+      - level: WARN
+        messageTemplate: "Suspicious device behavior: {deviceId} - Pattern: unexpected reboot - Risk score: 78 - Location: {location}"
+        probability: 0.05
+        fields:
+          deviceId: "{{faker.string.uuid}}"
+          patternType: "{{random.arrayElement(['traffic spike','unexpected reboot','unauthorized access'])}}"
+          riskScore: "{{random.int(50,100)}}"
+          location: "{{random.arrayElement(['lab','office','warehouse'])}}"
+          anomalyType: "{{random.arrayElement(['behavioral','network','firmware'])}}"
+          confidence: "{{random.int(60,99)}}"
+        metadata:
+          component: behavior-analyzer
+          deviceId: "{deviceId}"
+          patternType: "{patternType}"
+          riskScore: "{riskScore}"
+          location: "{location}"
+          anomalyType: "{anomalyType}"
+          confidence: "{confidence}"
+
+  cloud:
+    enabled: false
+  database:
+    enabled: false
+  webserver:
+    enabled: false
+  email:
+    enabled: false
+  microservices:
+    enabled: false
+  firewall:
+    enabled: false
+  server:
+    enabled: false
+
+output:
+  format: "syslog"
+  destination: "syslog"
+  batching:
+    maxBatchSize: 200
+    flushIntervalMs: 500
+    enabled: true
+  syslog:
+    host: "localhost"
+    port: 514
+    protocol: "udp"
+    facility: "local0"
+    tag: "log-generator"
+
+file_output:
+  enabled: true
+  path: "/app/logs/syslog.log"
+  format: "syslog"
+  rotation: true
+  maxSize: "100MB"
+  maxFiles: 5
+
+storage:
+  currentPath: /app/logs
+  historicalPath: /app/logs
+  retention: 30
+
+performance:
+  workers: 2
+  memory_limit: "512MB"
+  batch_processing: true
+  real_time_mode: true

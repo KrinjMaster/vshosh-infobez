@@ -8,10 +8,6 @@ admin_bp = Blueprint("admin", __name__)
 
 @admin_bp.route("/api/admin/threats", methods=["GET"])
 def get_new_threats():
-    """
-    Возвращает все угрозы после определённого времени
-    ?since=YYYY-MM-DD HH:MM:SS
-    """
     since = request.args.get("since", "1970-01-01 00:00:00")
     with sqlite3.connect(DB_PATH) as conn:
         c = conn.cursor()
