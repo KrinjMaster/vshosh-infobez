@@ -16,22 +16,6 @@ generators:
         metadata:
           component: api-gateway
           correlationId: "{correlationId}"
-
-      - level: ERROR
-        messageTemplate: "HTTP {method} {path} - {status} {errorMessage} - IP: {CLIENTIP} - User: {USERID}"
-        probability: 0.01
-        fields:
-          method: "{{random.arrayElement(['GET','POST'])}}"
-          path: "{{random.arrayElement(['/login','/admin'])}}"
-          status: "{{random.arrayElement([401,403,500])}}"
-          errorMessage: "{{random.arrayElement(['Unauthorized','Forbidden','Internal Server Error'])}}"
-          errorCode: "{{random.arrayElement(['AUTH001','AUTH403','SRV500'])}}"
-          correlationId: "{{faker.string.uuid}}"
-        metadata:
-          component: api-gateway
-          errorCode: "{errorCode}"
-          correlationId: "{correlationId}"
-
       - level: WARN
         messageTemplate: "Rate limit exceeded for IP {CLIENTIP} - {path} - Attempts: {attemptCount}/min"
         probability: 0.05
@@ -42,31 +26,6 @@ generators:
         metadata:
           component: rate-limiter
           attemptCount: "{attemptCount}"
-          correlationId: "{correlationId}"
-
-      - level: DEBUG
-        messageTemplate: "Request headers: {headers} - {path} - Session: {SESSIONID}"
-        probability: 0.1
-        fields:
-          headers: "{{faker.internet.userAgent}}"
-          path: "{{random.arrayElement(['/api/data','/profile'])}}"
-          correlationId: "{{faker.string.uuid}}"
-        metadata:
-          component: api-gateway
-          correlationId: "{correlationId}"
-
-      - level: WARN
-        messageTemplate: "Suspicious request pattern detected: {method} {path} from {CLIENTIP} - Pattern: {patternType}"
-        probability: 0.05
-        fields:
-          method: "{{random.arrayElement(['GET','POST'])}}"
-          path: "{{random.arrayElement(['/login','/admin'])}}"
-          patternType: "{{random.arrayElement(['bruteforce','sql_injection','path_traversal'])}}"
-          riskScore: "{{random.int(60,95)}}"
-          correlationId: "{{faker.string.uuid}}"
-        metadata:
-          component: security-monitor
-          riskScore: "{riskScore}"
           correlationId: "{correlationId}"
   authentication:
     enabled: true

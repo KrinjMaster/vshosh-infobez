@@ -5,6 +5,7 @@ import time
 from datetime import datetime, timedelta
 
 import jwt
+from auth_middleware import verify_request
 from config import (
     AUTHORIZED_IPS,
     AUTHORIZED_MACS,
@@ -146,13 +147,10 @@ def analysis_loop():
 
 @app.route("/api/auth", methods=["POST"])
 def auth():
-    client_mac = request.headers.get("X-MAC-ADDRESS")
     client_ip = request.remote_addr
 
-    if client_mac not in AUTHORIZED_MACS:
-        return jsonify({"error": "Unauthorized MAC"}), 403
-
     token = create_jwt(client_ip)
+
     response = jsonify({"status": "authenticated"})
     response.set_cookie(
         "access_token",
@@ -165,32 +163,24 @@ def auth():
 
 
 @app.route("/api/log", methods=["POST"])
+@verify_request
 def receive_logs():
-    if not check_jwt():
-        return jsonify({"error": "JWT required"}), 401
-
-    client_mac = request.headers.get("X-MAC-ADDRESS")
-    client_ip = request.remote_addr
-
-    if client_mac not in AUTHORIZED_MACS:
-        return jsonify({"error": "Unauthorized MAC"}), 403
-
-    data = request.json
+    data = request.json or {}
     events = data.get("events", [])
 
     now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
     with buffer_lock:
         for e in events:
-            record = {
-                "timestamp": now,
-                "client_id": e.get("client_id", "unknown"),
-                "mac": client_mac,
-                "ip": client_ip,
-                "message": e.get("message", ""),
-            }
-
-            log_buffer.append(record)
+            log_buffer.append(
+                {
+                    "timestamp": now,
+                    "client_id": e.get("client_id", "unknown"),
+                    "mac": e.get("mac", "uknown_mac"),
+                    "ip": e.get("ip", "uknown_ip"),
+                    "message": e.get("message", ""),
+                }
+            )
 
         if len(log_buffer) > BUFFER_LIMIT:
             log_buffer[:] = log_buffer[-BUFFER_LIMIT:]

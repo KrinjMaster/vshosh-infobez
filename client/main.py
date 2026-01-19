@@ -2,15 +2,8 @@ import threading
 import time
 
 from auth import AuthClient
-from config import (
-    CLIENT_ID,
-    CLIENT_IP,
-    LOG_DIR,
-    LOG_ENDPOINT,
-    MAC_ADDRESS,
-    SEND_INTERVAL,
-    SERVER_URL,
-)
+from config import (CLIENT_ID, CLIENT_IP, LOG_DIR, LOG_ENDPOINT, MAC_ADDRESS,
+                    SEND_INTERVAL, SERVER_URL)
 from generator_runner import start_generator
 from log_formatter import jsonl_to_linux_logs_loop
 from log_watcher import LogWatcher
